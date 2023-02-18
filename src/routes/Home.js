@@ -1,27 +1,31 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { addToDo } from '../store';
+import ToDo from '../components/ToDo';
 
 function Home() {
   const [text, setText] = useState('');
-  const toDo = useSelector(state => state);
+  const toDos = useSelector(state => state);
   const dispatch = useDispatch();
 
   const onChange = event => setText(event.target.value);
   const onSubmit = event => {
     event.preventDefault();
     dispatch(addToDo(text));
-    console.log(text);
     setText('');
   };
   return (
     <div>
       <h1>To Do</h1>
       <form action='' onSubmit={onSubmit}>
-        <input type='text' value={text} onChange={onChange} />
+        <input type='text' value={text} onChange={onChange} required />
         <button>Add</button>
       </form>
-      <ul>{JSON.stringify(toDo)}</ul>
+      <ul>
+        {toDos.map(toDo => (
+          <ToDo {...toDo} key={toDo.id} />
+        ))}
+      </ul>
     </div>
   );
 }
